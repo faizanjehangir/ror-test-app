@@ -79,6 +79,8 @@ GEM
       irb (~> 1.10)
       reline (>= 0.3.8)
     erubi (1.12.0)
+    faker (3.3.1)
+      i18n (>= 1.8.11, < 2)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.5)
@@ -194,6 +196,7 @@ DEPENDENCIES
   bootsnap
   cssbundling-rails
   debug
+  faker (~> 3.3)
   jbuilder
   jsbundling-rails
   pg (~> 1.1)
