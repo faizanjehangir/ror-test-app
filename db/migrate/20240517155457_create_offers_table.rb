@@ -1,5 +1,5 @@
 class CreateOffersTable < ActiveRecord::Migration[7.0]
-  def change
+ def change
     create_table :offers do |t|
       t.string :title, null: false
       t.text :description, null: false
