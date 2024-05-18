@@ -1,4 +1,3 @@
-// app/javascript/hooks/useSession.js
 import { useEffect, useState } from 'react';
 
 const useSession = () => {

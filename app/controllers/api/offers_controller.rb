@@ -1,4 +1,5 @@
 class Api::OffersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_offer, only: %i[show destroy]
 
   def index

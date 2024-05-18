@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+const UNAUTHORIZED = 401;
+
 const Offers = () => {
   const navigate = useNavigate();
   const [offers, setOffers] = useState([]);
@@ -12,10 +14,14 @@ const Offers = () => {
         if (res.ok) {
           return res.json();
         }
-        throw new Error("Network response was not ok.");
+        throw res;
       })
       .then((res) => setOffers(res))
-      .catch(() => navigate("/"));
+      .catch((err) => {
+        if (err?.status === UNAUTHORIZED){
+          navigate("/account");
+        }
+      });
   }, []);
 
   const allOffers = offers.map((offer, index) => (
