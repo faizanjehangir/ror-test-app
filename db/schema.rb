@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_19_021243) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_19_173442) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "claimed_offers", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "offer_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["offer_id"], name: "index_claimed_offers_on_offer_id"
+    t.index ["user_id"], name: "index_claimed_offers_on_user_id"
+  end
 
   create_table "offers", force: :cascade do |t|
     t.string "title", null: false
@@ -34,4 +43,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_19_021243) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "claimed_offers", "offers"
+  add_foreign_key "claimed_offers", "users"
 end

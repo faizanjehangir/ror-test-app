@@ -6,6 +6,10 @@ Rails.application.routes.draw do
     post 'offers/create'
     delete '/destroy/:id', to: 'offers#destroy'
 
+    # claim offers
+    get 'claimed_offers/index'
+    post 'claimed_offers/create'
+
     # Registration
     post 'register', to: 'registration#create'
 

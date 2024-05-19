@@ -3,6 +3,9 @@ class User < ApplicationRecord
   validates :username, presence: true
   validates :password, presence: true
 
+  has_many :claimed_offers
+  has_many :offers, through: :claimed_offers
+
   def self.validate_gender(gender)
     return nil if gender.nil? || gender.strip.empty?
     gender
