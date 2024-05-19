@@ -1,10 +1,12 @@
 class Api::RegistrationController < ApplicationController
-  def new
-    @user = User.new
-  end
+  wrap_parameters false
 
   def create
-    @user = User.new(user_params)
+    birth_year = user_params[:birthYear].to_i
+    age = User.calculate_age(birth_year)
+    gender = User.validate_gender(user_params[:gender])
+    
+    @user = User.new(user_params.except(:birthYear, :gender).merge(age: age, gender: gender))
 
     if @user.save
       session[:user_id] = @user.id
@@ -17,6 +19,6 @@ class Api::RegistrationController < ApplicationController
   private
 
   def user_params
-    params.permit(:username, :password, :password_confirmation)
+    params.permit(:username, :password, :gender, :birthYear)
   end
 end

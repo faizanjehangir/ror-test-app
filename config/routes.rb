@@ -1,20 +1,17 @@
 Rails.application.routes.draw do
-
-  
-
   namespace :api do
+
+    # offers
     get 'offers/index'
     post 'offers/create'
     delete '/destroy/:id', to: 'offers#destroy'
 
     # Registration
-    get '/signup', to: 'registrations#new'
-    post '/signup', to: 'registrations#create'
+    post 'register', to: 'registration#create'
 
     # Session
-    get '/login', to: 'sessions#new'
-    post '/login', to: 'sessions#create'
-    delete '/logout', to: 'sessions#destroy'
+    post 'login', to: 'session#create'
+    delete 'logout', to: 'session#destroy'
   end
 
   get '/*path' => 'homepage#index'

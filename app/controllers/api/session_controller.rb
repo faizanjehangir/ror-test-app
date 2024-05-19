@@ -1,4 +1,5 @@
 class Api::SessionController < ApplicationController
+
   def new
   end
 
