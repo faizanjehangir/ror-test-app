@@ -7,33 +7,55 @@ const Home = () =>  {
   const navigate = useNavigate();
   const [offers, setOffers] = useState([]);
 
+  const fetchOffers = () => {
+    fetch(`/api/claimed_offers`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
+      },
+      credentials: 'include',
+    })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      throw res;
+    })
+    .then(res => setOffers(res))
+    .catch((err) => {
+      if (err?.status === UNAUTHORIZED) {
+        navigate("/account")
+      } else if (err) {
+        console.log(err);
+      }
+    });
+  }
+
   useEffect(() => {
-      fetch(`/api/claimed_offers`, {
-        method: 'GET',
+      fetchOffers();
+  }, []);
+
+  const handleCancel = async(offerId) => {
+
+    try {
+      const response = await fetch(`/api/claimed_offers/${offerId}`, {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
         },
         credentials: 'include',
-      })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
-      .then(res => setOffers(res))
-      .catch((err) => {
-        if (err?.status === UNAUTHORIZED) {
-          navigate("/account")
-        } else if (err) {
-          console.log(err);
-        }
       });
-  }, []);
 
-  const handleCancel = async(offer) => {
-    console.log("cancelled..", offer);
+      if (response.ok) {
+        fetchOffers();
+      } else {
+        throw new Error('Failed to unclaim offer');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
 
   const handleLogout = async () => {
@@ -66,7 +88,7 @@ const Home = () =>  {
       <div className="card mb-4">
         <div className="card-body">
           <h5 className="card-title">{offer.title}</h5>
-          <button onClick={() => handleCancel(offer)} className="btn btn-outline-danger">
+          <button onClick={() => handleCancel(offer.id)} className="btn btn-outline-danger">
             Release Offer
           </button>
         </div>
@@ -81,8 +103,6 @@ const Home = () =>  {
       </h4>
     </div>
   );
-
-  console.log(allOffers);
 
   return (
     <>
