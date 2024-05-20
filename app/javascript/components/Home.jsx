@@ -7,7 +7,7 @@ const Home = () =>  {
   const navigate = useNavigate();
   const [offers, setOffers] = useState([]);
 
-  const fetchOffers = () => {
+  const fetchClaimedOffers = () => {
     fetch(`/api/claimed_offers`, {
       method: 'GET',
       headers: {
@@ -33,7 +33,7 @@ const Home = () =>  {
   }
 
   useEffect(() => {
-      fetchOffers();
+    fetchClaimedOffers();
   }, []);
 
   const handleCancel = async(offerId) => {
@@ -49,7 +49,7 @@ const Home = () =>  {
       });
 
       if (response.ok) {
-        fetchOffers();
+        fetchClaimedOffers();
       } else {
         throw new Error('Failed to unclaim offer');
       }

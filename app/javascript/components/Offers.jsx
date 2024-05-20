@@ -9,6 +9,10 @@ const Offers = () => {
   const [offers, setOffers] = useState([]);
 
   useEffect(() => {
+    fetchOffers();
+  }, []);
+
+  const fetchOffers = () => {
     const url = "/api/offers";
     fetch(url)
       .then((res) => {
@@ -23,18 +27,12 @@ const Offers = () => {
           navigate("/account");
         }
       });
-  }, []);
-
-  const deleteOfferById = id => {
-    setOffers(oldOffers => {
-      return oldOffers.filter(offer => offer.id !== id)
-    })
   }
 
-  const handleClaim = async (offer) => {
+  const handleClaimOfferClick = async (offerId) => {
     const endpoint = '/api/claimed_offers';
     const payload = {
-      offer_id: offer.id
+      offer_id: offerId
     }
 
     try {
@@ -49,8 +47,7 @@ const Offers = () => {
       });
 
       if (response.ok) {
-        // update offers state and remove claimed offer
-        deleteOfferById(offer.id);
+        fetchOffers();
         return;
       }
       throw response;
@@ -63,14 +60,12 @@ const Offers = () => {
     }
   }
 
-  
-
   const allOffers = offers.map((offer, index) => (
     <div key={index} className="col-md-6 col-lg-4">
       <div className="card mb-4">
         <div className="card-body">
           <h5 className="card-title">{offer.title}</h5>
-          <button onClick={() => handleClaim(offer)} className="btn btn-outline-success">
+          <button onClick={() => handleClaimOfferClick(offer.id)} className="btn btn-outline-success">
             Claim Offer
           </button>
         </div>
