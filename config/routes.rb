@@ -2,13 +2,13 @@ Rails.application.routes.draw do
   namespace :api do
 
     # offers
-    get 'offers/index'
+    get 'offers', to: 'offers#index'
     post 'offers/create'
-    delete '/destroy/:id', to: 'offers#destroy'
 
     # claim offers
-    get 'claimed_offers/index'
-    post 'claimed_offers/create'
+    get 'claimed_offers', to: 'claimed_offers#index'
+    post 'claimed_offers', to: 'claimed_offers#create'
+    delete 'claimed_offers/:id', to: 'claimed_offers#destroy'
 
     # Registration
     post 'register', to: 'registration#create'

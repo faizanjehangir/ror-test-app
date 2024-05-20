@@ -6,6 +6,10 @@ class User < ApplicationRecord
   has_many :claimed_offers
   has_many :offers, through: :claimed_offers
 
+  scope :active, -> { where(active: true) }
+
+  before_create :set_default_active
+
   def self.validate_gender(gender)
     return nil if gender.nil? || gender.strip.empty?
     gender
@@ -16,5 +20,11 @@ class User < ApplicationRecord
 
     current_year = Date.today.year
     current_year - birth_year
+  end
+
+  private
+
+  def set_default_active
+    self.active = true if self.active.nil?
   end
 end

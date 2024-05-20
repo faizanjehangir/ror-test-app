@@ -3,8 +3,9 @@ class Api::OffersController < ApplicationController
   before_action :set_offer, only: %i[show destroy]
 
   def index
-    offer = Offer.all.order(created_at: :desc)
-    render json: offer
+    claimed_offer_ids = current_user.claimed_offers.active.pluck(:offer_id)
+    offers = Offer.where.not(id: claimed_offer_ids).order(created_at: :desc)
+    render json: offers
   end
 
   def create

@@ -8,21 +8,33 @@ const Home = () =>  {
   const [offers, setOffers] = useState([]);
 
   useEffect(() => {
-    const url = "/api/offers/index";
-    fetch(url)
+      fetch(`/api/claimed_offers`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
+        },
+        credentials: 'include',
+      })
       .then((res) => {
         if (res.ok) {
           return res.json();
         }
         throw res;
       })
-      .then((res) => setOffers(res))
+      .then(res => setOffers(res))
       .catch((err) => {
         if (err?.status === UNAUTHORIZED) {
           navigate("/account")
+        } else if (err) {
+          console.log(err);
         }
       });
   }, []);
+
+  const handleCancel = async(offer) => {
+    console.log("cancelled..", offer);
+  }
 
   const handleLogout = async () => {
     const url = "/api/logout";
@@ -49,41 +61,47 @@ const Home = () =>  {
     }
   }
 
-  const allOffers = offers.map((offer, index) => (
+  const allOffers = offers.length ? offers.map((offer, index) => (
     <div key={index} className="col-md-6 col-lg-4">
       <div className="card mb-4">
         <div className="card-body">
           <h5 className="card-title">{offer.title}</h5>
-          <Link to={`/offer/${offer.id}`} className="btn custom-button">
-            View Offer
-          </Link>
+          <button onClick={() => handleCancel(offer)} className="btn btn-outline-danger">
+            Release Offer
+          </button>
         </div>
       </div>
     </div>
-  ));
+  )) : [];
   
   const noOffer = (
     <div className="vw-100 vh-50 d-flex align-items-center justify-content-center">
       <h4>
-        No offers yet.
+        No offers claimed yet.
       </h4>
     </div>
   );
 
+  console.log(allOffers);
+
   return (
     <>
-     <div className="vw-100 vh-100 primary-color d-flex align-items-center justify-content-center">
-        <div className="jumbotron jumbotron-fluid bg-transparent">
-          <div className="container secondary-color">
-            <div className="d-flex flex-row bd-highlight justify-content-between">
+      <section className="jumbotron jumbotron-fluid text-center">
+        <div className="container py-5">
+          <h1 className="display-4">Welcome to the PlayGround!</h1>
+        </div>
+      </section>
+      <div className="py-5">
+        <main className="container">
+          <div className="d-flex flex-row bd-highlight justify-content-between">
               <Link
                 to="/offers"
-                className="btn btn-lg custom-button"
+                className="btn btn-lg btn-primary"
                 role="button"
               >
                 View Offers
               </Link>
-              <button type="button" className="btn btn-lg custom-button" onClick={handleLogout}>Sign Out</button>
+              <button type="button" className="btn btn-lg btn-secondary" onClick={handleLogout}>Sign Out</button>
             </div>
             <hr className="my-4" />
             <div className="row">
@@ -94,11 +112,7 @@ const Home = () =>  {
                 </>
               ) : noOffer}
             </div>
-            {/* <p className="lead">
-              List of all available offers redeemed:
-            </p> */}
-          </div>
-        </div>
+        </main>
       </div>
     </>
   );
