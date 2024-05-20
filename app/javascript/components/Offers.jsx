@@ -65,6 +65,7 @@ const Offers = () => {
       <div className="card mb-4">
         <div className="card-body">
           <h5 className="card-title">{offer.title}</h5>
+          <p className="card-text">{offer.description}</p>
           <button onClick={() => handleClaimOfferClick(offer.id)} className="btn btn-outline-success">
             Claim Offer
           </button>

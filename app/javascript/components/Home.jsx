@@ -88,6 +88,7 @@ const Home = () =>  {
       <div className="card mb-4">
         <div className="card-body">
           <h5 className="card-title">{offer.title}</h5>
+          <p className="card-text">{offer.description}</p>
           <button onClick={() => handleCancel(offer.id)} className="btn btn-outline-danger">
             Release Offer
           </button>
