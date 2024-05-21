@@ -2,6 +2,10 @@
 
 This project is a Ruby on Rails 7 application with a React frontend. It follows the test instructions to allow a player to interact with offers and claim them for further usage.
 
+## Demo
+
+https://github.com/faizanjehangir/ror-test-app/assets/4929436/c1b211f1-675f-4eb9-8d45-47e3890bfa3b
+
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
