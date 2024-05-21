@@ -41,6 +41,10 @@ Ensure PostgreSQL is running and create the database.
 
 `rails db:create`
 
+Load the tables using:
+
+`rails db:schema:load`
+
 #### 2. Seed the Database:
 
 Seed the database with initial data.
