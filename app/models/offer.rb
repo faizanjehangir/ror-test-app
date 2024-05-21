@@ -9,6 +9,15 @@ class Offer < ApplicationRecord
 
   before_create :set_default_active
 
+  def self.available_for_user(user)
+    claimed_offer_ids = user.claimed_offers.active.pluck(:offer_id)
+
+    where.not(id: claimed_offer_ids)
+      .where('age = ? OR age IS NULL', user.age)
+      .where('gender = ? OR gender IS NULL', user.gender)
+      .order(created_at: :desc)
+  end
+
   private
 
   def set_default_active
