@@ -73,3 +73,5 @@ gem "faker", "~> 3.3"
 gem "bcrypt", "~> 3.1"
 
 gem "rack-cors", "~> 2.0"
+
+gem "kaminari", "~> 1.2"

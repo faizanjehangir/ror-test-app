@@ -4,8 +4,19 @@ class Api::OffersController < ApplicationController
 
   def index
     offers = Offer.available_for_user(current_user)
-    
-    render json: offers
+                  .page(params[:page])
+                  .per(params[:per_page])
+
+    render json: {
+      offers: offers,
+      meta: {
+        current_page: offers.current_page,
+        next_page: offers.next_page,
+        prev_page: offers.prev_page,
+        total_pages: offers.total_pages,
+        total_count: offers.total_count
+      }
+    }
   end
 
   def create

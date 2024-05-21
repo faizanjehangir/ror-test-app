@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Pagination from 'react-bootstrap/Pagination'; 
 
 const UNAUTHORIZED = 401;
 const ENTITY_UNPROCESSED = 422;
@@ -7,13 +8,16 @@ const ENTITY_UNPROCESSED = 422;
 const Offers = () => {
   const navigate = useNavigate();
   const [offers, setOffers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(9);
+  const [meta, setMeta] = useState({});
 
   useEffect(() => {
     fetchOffers();
-  }, []);
+  }, [page]);
 
   const fetchOffers = () => {
-    const url = "/api/offers";
+    const url = `/api/offers?page=${page}&per_page=${perPage}`;
     fetch(url)
       .then((res) => {
         if (res.ok) {
@@ -21,7 +25,10 @@ const Offers = () => {
         }
         throw res;
       })
-      .then((res) => setOffers(res))
+      .then((data) => {
+        setOffers(data.offers);
+        setMeta(data.meta);
+      })
       .catch((err) => {
         if (err?.status === UNAUTHORIZED){
           navigate("/account");
@@ -59,6 +66,10 @@ const Offers = () => {
       }
     }
   }
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
 
   const allOffers = offers.map((offer, index) => (
     <div key={index} className="col-md-6 col-lg-4">
@@ -100,6 +111,26 @@ const Offers = () => {
           </div>
         </main>
       </div>
+      <Pagination className="justify-content-center">
+        <Pagination.First onClick={() => handlePageChange(1)} disabled={meta.current_page === 1} />
+        <Pagination.Prev onClick={() => handlePageChange(page - 1)} disabled={meta.prev_page === null} />
+        
+        {[...Array(meta.total_pages)].map((_, index) => {
+          const pageIndex = index + 1;
+          return (
+            <Pagination.Item
+              key={pageIndex}
+              active={pageIndex === meta.current_page}
+              onClick={() => handlePageChange(pageIndex)}
+            >
+              {pageIndex}
+            </Pagination.Item>
+          );
+        })}
+        
+        <Pagination.Next onClick={() => handlePageChange(page + 1)} disabled={meta.next_page === null} />
+        <Pagination.Last onClick={() => handlePageChange(meta.total_pages)} disabled={meta.current_page === meta.total_pages} />
+      </Pagination>
     </>
   );
 };
